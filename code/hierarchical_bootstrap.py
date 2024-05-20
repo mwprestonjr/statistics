@@ -24,6 +24,7 @@ plotting of the results.
 
 # imports
 import numpy as np
+import matplotlib.pyplot as plt
 
 def hierarchical_bootstrap(df, variable, condition, level_1, level_2, 
                                n_iterations=1000, verbose=True, plot=True, 
@@ -72,24 +73,23 @@ def hierarchical_bootstrap(df, variable, condition, level_1, level_2,
     # split groups
     df_0, df_1 = _split_experimental_conditions(df, condition)
 
-    # run bootstrap
+    # perform hierarchical bootstrap
     distribution_0 = _hierarchical_bootstrap(df_0, variable, level_1, level_2, 
                                              n_iterations)
     distribution_1 = _hierarchical_bootstrap(df_1, variable, level_1, level_2, 
                                              n_iterations)
 
-    # compute p-boot 
+    # compute p-value
     p_value, joint_prob, bin_edges = _compute_p_value(distribution_0, 
                                                       distribution_1)
 
-    # print/plot results    
+    # print/plot results
     if verbose:
         print(f"p-value: {p_value:.3f}")
     if plot:
         _plot_results(df, variable, condition, distribution_0, distribution_1, 
                       joint_prob, bin_edges, **kwargs)
 
-    # return p_value, distribution_0, distribution_1
     return p_value, joint_prob, bin_edges, distribution_0, distribution_1
 
 
@@ -155,17 +155,17 @@ def _hierarchical_bootstrap(df, variable, level_1, level_2, iterations):
     # loop through iterations
     distribution = np.zeros(iterations)
     for i_iteration in range(iterations):
-        # Resample level 2 
+        # resample level 1 (clusters)
         clusters_resampled = np.random.choice(clusters, size=n_clusters)
 
-        # resample level 3 and get data for each cluster
+        # resample level 2 (instances) and get data for each cluster
         values = []
         for i_cluster, cluster_i in enumerate(clusters_resampled):
             # resample level 3
             instances = df.loc[df[level_1]==cluster_i, level_2].unique()
             instances_resampled = np.random.choice(instances, size=n_instances)
 
-            # get data for each instance within cluster and average
+            # get data for each instance within cluster
             for _, instance_i in enumerate(instances_resampled):
                 value = df.loc[(df[level_1]==cluster_i) & \
                                (df[level_2]==instance_i), variable].values[0]
@@ -215,9 +215,6 @@ def _plot_results(df, variable, condition, distribution_0,
     Plot bootstrap results. PLotting function for run_hierarchical_bootstrap().
     """
 
-    # imports
-    import matplotlib.pyplot as plt
-
     # create figure
     fig, (ax0, ax1, ax2) = plt.subplots(1,3, figsize=(18,4))
 
@@ -235,7 +232,7 @@ def _plot_results(df, variable, condition, distribution_0,
     ax0.set_ylabel('count')
     ax0.set_title('Original dataset')
     
-    # ax1: plot distributions
+    # ax1: plot reasmapled distributions
     ax1.hist(distribution_0, bins=bin_edges, color='k', alpha=0.5, 
              label=conditions[0])
     ax1.hist(distribution_1, bins=bin_edges, color='b', alpha=0.5, 
