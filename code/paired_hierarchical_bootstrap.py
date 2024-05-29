@@ -162,7 +162,8 @@ def _hierarchical_bootstrap(df, variable, condition, level_1, level_2,
                 values_ii = df.loc[(df[level_1]==cluster_i) & 
                                   (df[level_2]==instance_i)]
                 for i_condtion, condition_i in enumerate(conditions):
-                    value = values_ii.loc[df[condition]==condition_i, variable].values
+                    value = values_ii.loc[values_ii[condition]==condition_i, 
+                                          variable].values
                     values[i_cluster, i_instance, i_condtion] = value
                 
         # compute average for iteration
