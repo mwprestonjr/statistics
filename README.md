@@ -1,4 +1,5 @@
 # statistics
 Custom statistics modules, including:
-- hierarchical_bootstrap
-- paired_hierarchical_bootstrap
+- hierarchical bootstrap
+- paired hierarchical bootstrap
+- paired repeated-measures permutation analysis or variance
