@@ -140,10 +140,10 @@ def _hierarchical_resampling(df, variable, condition, level_1, level_2):
         instances_resampled = np.random.choice(instances, size=n_instances)
 
         # get resampled data 
-        for instance_i in instances_resampled:
+        for i_instance, instance_i in enumerate(instances_resampled):
             values_ii = df.loc[(df[level_1]==cluster_i) & 
                                (df[level_2]==instance_i), variable].values
-            resampled_data[i_cluster*n_instances + instance_i] = values_ii  
+            resampled_data[i_cluster*n_instances + i_instance] = values_ii  
 
     # random permutation of conditions
     for ii in range(resampled_data.shape[0]):
