@@ -144,6 +144,9 @@ def _hierarchical_bootstrap(df, variable, condition, level_1, level_2,
                                                       level_2].unique())
     n_instances = int(np.nanmean(instances_per_cluster)) # use average number of instances per cluster
 
+    # Precompute unique instances for each cluster
+    cluster_instance_map = {cluster: df.loc[df[level_1] == cluster, level_2].unique() for cluster in clusters}
+
     # loop through iterations
     distribution = np.zeros(iterations)
     for i_iteration in range(iterations):
@@ -154,7 +157,7 @@ def _hierarchical_bootstrap(df, variable, condition, level_1, level_2,
         values = np.zeros([n_clusters, n_instances, 2])
         for i_cluster, cluster_i in enumerate(clusters_resampled):
             # resample level 3
-            instances = df.loc[df[level_1]==cluster_i, level_2].unique()
+            instances = cluster_instance_map[cluster_i]
             instances_resampled = np.random.choice(instances, size=n_instances)
 
             # get data for each instance within cluster and average
