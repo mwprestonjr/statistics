@@ -242,8 +242,7 @@ def _plot_results(df, variable, condition, level_1, level_2, distribution):
     _, (ax0, ax1) = plt.subplots(1, 2, figsize=(12,4))
 
     # ax0: plot empirical data
-    sns.violinplot(**plotting_params, ax=ax0, palette='colorblind',
-                   hue=condition)
+    sns.violinplot(**plotting_params, ax=ax0, palette='colorblind')
     sns.swarmplot(**plotting_params, ax=ax0, size=2, color='k', alpha=0.5)
     conditions = df[condition].unique()
     for i_chan in range(df_pivot.shape[0]):
