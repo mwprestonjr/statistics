@@ -9,10 +9,10 @@ from onesample_hierarchical_bootstrap import onesample_hierarchical_bootstrap
 
 
 def hierarchical_bootstrap(df, variable, level_1, level_2, condition=None,
-                           paired=False, onesample=False, n_iterations=1000, 
+                           paired=False, one_sample=False, n_iterations=1000, 
                            verbose=True, plot=True):
     
-    if onesample:
+    if one_sample:
         return onesample_hierarchical_bootstrap(df, variable, level_1, level_2,
                                                 n_iterations, verbose, plot)
 
