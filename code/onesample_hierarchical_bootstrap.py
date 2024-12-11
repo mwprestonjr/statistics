@@ -27,8 +27,9 @@ import matplotlib.pyplot as plt
 from utils import hierarchical_resampling, compute_p_value
 
 
-def onesample_hierarchical_bootstrap(df, variable, level_1, level_2, n_iterations=1000, 
-                           verbose=True, plot=True):    
+def onesample_hierarchical_bootstrap(df, variable, level_1, level_2, 
+                                     n_iterations=1000, verbose=True, 
+                                     plot=True):    
     """
     Perform the one-sample hierarchical bootstrap. 
 

@@ -27,9 +27,9 @@ import matplotlib.pyplot as plt
 from utils import hierarchical_resampling
 
 
-def twosample_hierarchical_bootstrap(df, variable, condition, level_1, level_2, 
-                            n_iterations=1000, verbose=True, plot=True, 
-                            **kwargs):    
+def twosample_hierarchical_bootstrap(df, variable, condition, level_1, level_2,
+                                     n_iterations=1000, verbose=True, plot=True, 
+                                     **kwargs):    
     """
     Perform the hierarchical bootstrap. This function performs a hierarchical 
     bootstrapto test whether the means of two distributions are significantly 
