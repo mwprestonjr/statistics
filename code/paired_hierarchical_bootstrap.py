@@ -18,13 +18,16 @@ enough to provide code for performing the standard hierarchical bootstrap here:
 https://github.com/soberlab/Hierarchical-Bootstrap-Paper. The present module 
 extends the aforementioned implementation by providing support for paired data 
 structures and additional functionality for plotting of the results.
-"""
 
+While this implementation is focused on the mean difference between two
+conditions, it can be easily extended to other statistics of interest.
+"""
 
 # imports
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from utils import compute_p_value
 
 
 def paired_hierarchical_bootstrap(df, variable, condition, level_1, level_2, 
@@ -72,11 +75,11 @@ def paired_hierarchical_bootstrap(df, variable, condition, level_1, level_2,
     """
 
     # run bootstrap
-    distribution = _hierarchical_bootstrap(df, variable, condition, level_1, 
+    distribution = _hierarchical_resampling(df, variable, condition, level_1, 
                                            level_2, n_iterations)
 
     # compute p-boot 
-    p_value, sign = _compute_p_value(distribution)
+    p_value, sign = compute_p_value(distribution)
 
     # compute true mean difference
     conditions = df[condition].unique()
@@ -96,8 +99,8 @@ def paired_hierarchical_bootstrap(df, variable, condition, level_1, level_2,
     return p_value, sign, distribution, true_mean
 
 
-def _hierarchical_bootstrap(df, variable, condition, level_1, level_2, 
-                            iterations):
+def _hierarchical_resampling(df, variable, condition, level_1, level_2, 
+                             iterations):
     """
     Perform paired hierarchical bootstrap. This function resamples the data,
     taking into account the paired and hierarchical structure of the dataset. 
@@ -199,23 +202,6 @@ def _mean_difference(data_a, data_b):
     difference = np.nanmean(data_b) - np.nanmean(data_a)
 
     return difference
-
-
-def _compute_p_value(distribution):    
-    '''
-    Compute the p-value for the paired hierarchical bootstrap. This function 
-    computes the p-value for the null hypothesis that the means of two
-    conditions are equal.
-
-    '''
-
-    # count values greater than 0
-    n_greater = np.sum(distribution > 0)
-    n_less = np.sum(distribution < 0)
-    p_value = np.min([n_greater, n_less]) / len(distribution)
-    sign = np.sign(n_greater - n_less)
-
-    return p_value, sign
 
 
 def _plot_results(df, variable, condition, level_1, level_2, distribution):
