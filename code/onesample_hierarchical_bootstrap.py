@@ -86,14 +86,15 @@ def _plot_results(df, variable, distribution):
 
     # ax0: plot orignal distributions
     data = df[variable].values
-    bin_edges = np.linspace(np.nanmin(data), np.nanmax(data), 30)
-    ax0.hist(data.ravel(), bins=bin_edges, color='grey')
+    ax0.hist(data.ravel(), color='k', alpha=0.5)
     ax0.set_xlabel('value')
     ax0.set_ylabel('count')
     ax0.set_title('Original dataset')
     
-    # ax1: plot reasmapled distributions
-    ax1.hist(distribution, bins=bin_edges, color='grey')
+    # ax1: plot resampled distributions
+    ax1.hist(distribution, color='k', alpha=0.5)
+    ax1.axvline(np.nanmean(distribution), color='r', label='mean')
+    ax1.axvline(0, color='k', linestyle='--', label='null')
     ax1.set_xlabel(variable)
     ax1.set_ylabel('count')
     ax1.set_title('Bootstrap results')
