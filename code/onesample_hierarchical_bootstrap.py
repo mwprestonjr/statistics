@@ -65,7 +65,7 @@ def onesample_hierarchical_bootstrap(df, variable, level_1, level_2,
                                            n_iterations)
 
     # compute p-value
-    p_value = compute_p_value(distribution)
+    p_value, sign = compute_p_value(distribution)
 
     # print/plot results
     if verbose:
@@ -73,7 +73,7 @@ def onesample_hierarchical_bootstrap(df, variable, level_1, level_2,
     if plot:
         _plot_results(df, variable, distribution)
 
-    return p_value, distribution
+    return p_value, sign, distribution
 
 
 def _plot_results(df, variable, distribution):
