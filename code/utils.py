@@ -91,7 +91,7 @@ def compute_p_value(distribution):
     return p_value, sign
 
 
-def check_input(df, variable, condition, level_1, level_2):
+def check_input(df, variable, level_1, level_2, condition=None):
     """
     Check input data for paired hierarchical bootstrap. This function checks 
     that each instance has both conditions present, and that the data is
@@ -101,7 +101,7 @@ def check_input(df, variable, condition, level_1, level_2):
     # check that 'variable', 'condition', 'level_1', and 'level_2' are in df
     if variable not in df.columns:
         raise ValueError(f"Variable '{variable}' not found in dataframe.")
-    if condition not in df.columns:
+    if (condition not in df.columns) and (condition is not None):
         raise ValueError(f"Condition '{condition}' not found in dataframe.")
     if level_1 not in df.columns:
         raise ValueError(f"Level 1 '{level_1}' not found in dataframe.")
@@ -110,6 +110,19 @@ def check_input(df, variable, condition, level_1, level_2):
 
     # check that each level_1-level_2 pair has data for both conditions
     # and drop cases of missing data
+    if condition is not None:
+        df = drop_missing_data(df, level_1, level_2, condition, variable)
+
+    return df
+
+
+def drop_missing_data(df, level_1, level_2, condition, variable):
+    """
+    Drop instances with missing data. This function checks that each instance
+    has both conditions present, and that the data is structured as a nested,
+    hierarchical dataset.
+    """
+    
     n_dropped = 0
     n_instances = 0
     clusters = df[level_1].unique()

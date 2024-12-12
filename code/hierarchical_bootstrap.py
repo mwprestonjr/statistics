@@ -63,7 +63,9 @@ def hierarchical_bootstrap(df, variable, level_1, level_2, condition=None,
                           paired=False, one_sample=True, n_iterations=1000, 
                           verbose=True, plot=True
     """
-    
+    # check input data
+    df = check_input(df, variable, level_1, level_2, condition)
+
     # One-sample test
     if one_sample:
         return onesample_hierarchical_bootstrap(df, variable, level_1, level_2,
@@ -74,7 +76,6 @@ def hierarchical_bootstrap(df, variable, level_1, level_2, condition=None,
         # check input data
         if condition is None:
             raise ValueError("Condition must be specified for two-sample test.")
-        df = check_input(df, variable, condition, level_1, level_2)
 
         if paired:
             # paired two-sample test
