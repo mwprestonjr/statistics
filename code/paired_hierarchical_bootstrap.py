@@ -58,8 +58,6 @@ def paired_hierarchical_bootstrap(df, variable, condition, level_1, level_2,
     plot : bool
         Whether to plot results, including empirical data and resampled
         distribution.
-    **kwargs : dict
-        Additional keyword arguments for plotting.
 
     Returns
     -------
